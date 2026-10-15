@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Sign Up — BXL Market Chat{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="form-page">
+    <h1 style="font-size: 1.6rem;">Create your account</h1>
+    <p class="helptext" style="margin-bottom: 24px;">Join thousands buying and selling safely on BXL.</p>
+    <form method="post" class="form-card">
+      {% csrf_token %}
+      {% for field in form %}
+        {% if field.errors %}<div class="form-errors">{{ field.errors|join:", " }}</div>{% endif %}
+        <div class="field">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}<div class="helptext">{{ field.help_text }}</div>{% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn--primary btn--block">Sign Up</button>
+    </form>
+    <p class="helptext" style="margin-top:16px; text-align:center;">
+      Already have an account? <a href="{% url 'accounts:login' %}" style="color: var(--green);">Log in</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

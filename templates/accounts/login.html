@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Login — BXL Market Chat{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="form-page">
+    <h1 style="font-size: 1.6rem;">Log in</h1>
+    <p class="helptext" style="margin-bottom: 24px;">Welcome back — chat, buy and sell where you left off.</p>
+    <form method="post" class="form-card">
+      {% csrf_token %}
+      {% if form.errors %}<div class="form-errors">Your username or password was incorrect.</div>{% endif %}
+      <div class="field">
+        <label for="{{ form.username.id_for_label }}">Username</label>
+        {{ form.username }}
+      </div>
+      <div class="field">
+        <label for="{{ form.password.id_for_label }}">Password</label>
+        {{ form.password }}
+      </div>
+      <button type="submit" class="btn btn--primary btn--block">Log In</button>
+    </form>
+    <p class="helptext" style="margin-top:16px; text-align:center;">
+      New here? <a href="{% url 'accounts:signup' %}" style="color: var(--green);">Create an account</a>
+    </p>
+    <p class="helptext" style="text-align:center; margin-top:8px;">
+  Want to deliver for us? <a href="{% url 'logistics:rider_signup' %}" style="color: var(--green);">Become a Rider</a>
+  </p>
+  </div>
+</div>
+{% endblock %}

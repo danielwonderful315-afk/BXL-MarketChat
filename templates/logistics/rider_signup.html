@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Become a Rider — BXL Market Chat{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="form-page">
+    <h1 style="font-size: 1.6rem;">Become a Rider</h1>
+    <p class="helptext" style="margin-bottom: 24px;">Sign up to start accepting delivery jobs on BXL Market Chat.</p>
+    <form method="post" class="form-card">
+      {% csrf_token %}
+      {% for field in form %}
+        {% if field.errors %}<div class="form-errors">{{ field.errors|join:", " }}</div>{% endif %}
+        <div class="field">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn--primary btn--block">Sign Up as a Rider</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

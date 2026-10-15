@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Track Delivery — BXL Market Chat{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="form-page">
+    <h1 style="font-size: 1.6rem;">Delivery Status</h1>
+
+    <div class="form-card">
+      <div class="spec-row"><span>Order</span><span>{{ delivery.order.product.title }}</span></div>
+      <div class="spec-row"><span>Status</span><span class="badge">{{ delivery.get_status_display }}</span></div>
+      <div class="spec-row"><span>Pickup</span><span>{{ delivery.pickup_address }}</span></div>
+      <div class="spec-row"><span>Dropoff</span><span>{{ delivery.dropoff_address }}, {{ delivery.state }}</span></div>
+      <div class="spec-row"><span>Delivery Option</span><span>{{ delivery.get_vehicle_type_display }}</span></div>
+      <div class="spec-row">
+        <span>Price</span>
+        <span>&#8358;{{ delivery.final_price|default:delivery.estimated_price|floatformat:0 }}{% if not delivery.final_price %} (estimated){% endif %}</span>
+      </div>
+            {% if delivery.assigned_rider %}
+      <div class="spec-row"><span>Rider</span><span>{{ delivery.assigned_rider.name }} — {{ delivery.assigned_rider.phone_number }}</span></div>
+      {% else %}
+      <div class="spec-row"><span>Rider</span><span>Not yet assigned</span></div>
+      {% endif %}
+    </div>
+
+    {% if delivery.order.payment %}
+    <div class="form-card">
+      <h3 style="font-size: 1rem; margin-bottom: 12px;">Payment</h3>
+      <div class="spec-row"><span>Amount Paid</span><span>&#8358;{{ delivery.order.payment.total_amount|floatformat:0 }}</span></div>
+      <div class="spec-row"><span>Escrow Status</span><span class="badge">{{ delivery.order.payment.get_escrow_status_display }}</span></div>
+      {% if delivery.order.payment.escrow_status == 'held' %}
+        <p class="helptext" style="margin-top:10px;">Your payment is held safely until you confirm you've received the item.</p>
+        {% if delivery.status == 'delivered' and delivery.order.buyer == user %}
+        <form method="post" action="{% url 'payments:confirm_received' delivery.order.pk %}" style="margin-top:12px;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn--primary btn--block">Confirm I Received This Item</button>
+        </form>
+        {% endif %}
+      {% endif %}
+    </div>
+    {% endif %}
+    </div>
+
+    <p class="helptext">
+      Riders are assigned manually by our team based on your location and delivery option.
+      This page doesn't auto-refresh — check back or contact support for updates.
+    </p>
+
+    <a href="{% url 'orders:my_orders' %}" class="btn btn--outline">Back to My Orders</a>
+  </div>
+</div>
+{% endblock %}

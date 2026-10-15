@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ feature_name }} — Coming Soon — BXL Market Chat{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="form-page" style="text-align:center;">
+    <div style="font-size: 3rem; margin-bottom: 12px;">&#128736;</div>
+    <h1 style="font-size: 1.6rem;">{{ feature_name }} is coming soon</h1>
+    <p class="helptext" style="margin: 12px 0 24px; max-width: 420px; margin-left:auto; margin-right:auto;">
+      We're still building this part of BXL Market Chat. Check back soon — in the meantime, browse what's already live.
+    </p>
+    <a href="{% url 'listings:home' %}" class="btn btn--primary">Back to Home</a>
+  </div>
+</div>
+{% endblock %}

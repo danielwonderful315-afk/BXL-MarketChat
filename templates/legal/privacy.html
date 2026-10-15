@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy — BXL Market Chat{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="form-page" style="max-width: 760px;">
+    <h1 style="font-size: 1.8rem;">Privacy Policy</h1>
+    <p class="helptext">Last updated: {% now "F j, Y" %}</p>
+
+    <div style="color: var(--text-muted); line-height: 1.7; margin-top: 24px;">
+      <h3 style="color: var(--text); margin-top: 28px;">1. Information We Collect</h3>
+      <p>When you use BXL Market Chat, we collect information you provide directly, including your name, email address, phone number, location, and any messages you send through our chat feature. We also collect information about your orders, deliveries, and payment status (not your card details — see Section 3).</p>
+
+      <h3 style="color: var(--text); margin-top: 28px;">2. How We Use Your Information</h3>
+      <p>We use your information to operate the platform: verifying your account (via email OTP), connecting you with buyers/sellers through chat, coordinating delivery, and processing payments. We do not sell your personal information to third parties.</p>
+
+      <h3 style="color: var(--text); margin-top: 28px;">3. Payment Information</h3>
+      <p>Payments are processed by Paystack, a third-party payment processor. BXL does not receive or store your card number, CVV, or other sensitive payment details — these are handled entirely within Paystack's secure systems, subject to their own privacy policy.</p>
+
+      <h3 style="color: var(--text); margin-top: 28px;">4. Third-Party Services We Use</h3>
+      <p>We rely on trusted third-party services to operate the platform, including Paystack (payments), an email provider (account verification), and infrastructure providers for real-time chat. These providers process limited data strictly to perform their function for us.</p>
+
+      <h3 style="color: var(--text); margin-top: 28px;">5. Chat Messages</h3>
+      <p>Messages sent through BXL Market Chat are stored so that conversation history is available to both parties. Our team may review messages if a dispute, safety concern, or violation of our Terms is reported.</p>
+
+      <h3 style="color: var(--text); margin-top: 28px;">6. Data Retention</h3>
+      <p>We retain account and transaction information for as long as your account is active, and as needed to comply with legal obligations, resolve disputes, and enforce our agreements.</p>
+
+      <h3 style="color: var(--text); margin-top: 28px;">7. Your Rights</h3>
+      <p>You may request access to, correction of, or deletion of your personal information by contacting us. Note that some information may need to be retained for legal, security, or fraud-prevention purposes even after a deletion request.</p>
+
+      <h3 style="color: var(--text); margin-top: 28px;">8. Security</h3>
+      <p>We take reasonable steps to protect your information, including encrypted password storage and one-time codes for account verification. However, no online platform can guarantee absolute security.</p>
+
+      <h3 style="color: var(--text); margin-top: 28px;">9. Changes to This Policy</h3>
+      <p>We may update this Privacy Policy from time to time. We will note the "Last updated" date at the top of this page when changes are made.</p>
+
+      <h3 style="color: var(--text); margin-top: 28px;">10. Contact</h3>
+      <p>For questions about this Privacy Policy or your data, contact us at bxlmarketchat@gmail.com.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Choose Delivery — BXL Market Chat{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="form-page">
+    <h1 style="font-size: 1.6rem;">Choose a Delivery Option</h1>
+    <p class="helptext" style="margin-bottom: 24px;">
+      For <strong>{{ order.product.title }}</strong> — pickup from {{ order.product.location }}.
+    </p>
+
+    <form method="post" class="form-card">
+      {% csrf_token %}
+
+      {% if form.dropoff_address.errors %}<div class="form-errors">{{ form.dropoff_address.errors|join:", " }}</div>{% endif %}
+      <div class="field">
+        <label for="{{ form.dropoff_address.id_for_label }}">Delivery Address</label>
+        {{ form.dropoff_address }}
+      </div>
+
+      {% if form.state.errors %}<div class="form-errors">{{ form.state.errors|join:", " }}</div>{% endif %}
+      <div class="field">
+        <label for="{{ form.state.id_for_label }}">State</label>
+        {{ form.state }}
+      </div>
+
+      {% if form.vehicle_type.errors %}<div class="form-errors">{{ form.vehicle_type.errors|join:", " }}</div>{% endif %}
+      <div class="field">
+        <label for="{{ form.vehicle_type.id_for_label }}">Delivery Option</label>
+        {{ form.vehicle_type }}
+        <div class="helptext">
+          Motorcycle: &#8358;3,000 (small items) &middot;
+          Car: &#8358;5,000 (medium) &middot;
+          Van: &#8358;7,000 (large) &middot;
+          Truck: &#8358;10,000 (extra large)
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn--primary btn--block">Confirm Delivery Request</button>
+    </form>
+
+    <p class="helptext" style="text-align:center;">
+      Prices shown are estimates. Our team reviews every request and assigns a rider — no automated dispatch.
+    </p>
+  </div>
+</div>
+{% endblock %}

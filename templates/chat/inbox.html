@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Chats — BXL Market Chat{% endblock %}
+{% block nav_chat %}active{% endblock %}
+{% block content %}
+<div class="chat-shell">
+  <div class="chat-list">
+    {% for conversation in conversations %}
+      {% with other_user=conversation.buyer %}
+      <a href="{% url 'chat:conversation' conversation.pk %}" class="chat-list__item">
+        <div class="avatar">{{ conversation.buyer.username|first|upper }}</div>
+        <div class="chat-list__meta">
+          <div class="name">{{ conversation.buyer.username }} &harr; {{ conversation.seller.username }}</div>
+          <div class="preview">{{ conversation.product.title }}</div>
+        </div>
+      </a>
+      {% endwith %}
+    {% empty %}
+      <div class="empty-state" style="margin: 20px;">
+        <h3>No chats yet</h3>
+        <p>Message a seller from a product page to start one.</p>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="chat-thread" style="align-items:center; justify-content:center; color: var(--text-muted);">
+    Select a conversation to start chatting.
+  </div>
+</div>
+{% endblock %}

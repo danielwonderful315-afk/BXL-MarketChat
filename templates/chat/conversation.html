@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Chat — BXL Market Chat{% endblock %}
+{% block nav_chat %}active{% endblock %}
+{% block content %}
+<div class="chat-shell">
+  <div class="chat-list">
+    {% for c in conversation.buyer.conversations_as_buyer.all %}
+      <a href="{% url 'chat:conversation' c.pk %}" class="chat-list__item {% if c.pk == conversation.pk %}active{% endif %}">
+        <div class="avatar">{{ c.seller.username|first|upper }}</div>
+        <div class="chat-list__meta">
+          <div class="name">{{ c.seller.username }}</div>
+          <div class="preview">{{ c.product.title }}</div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+
+  <div class="chat-thread">
+    <div class="chat-thread__header">
+      <div class="avatar">{{ conversation.seller.username|first|upper }}</div>
+      <div>
+        <div style="font-weight:600;">{{ conversation.buyer.username }} &amp; {{ conversation.seller.username }}</div>
+        <div class="helptext">Re: {{ conversation.product.title }}</div>
+      </div>
+    </div>
+
+    <div class="chat-thread__messages" id="message-list">
+      {% for message in conversation.messages.all %}
+        <div class="bubble {% if message.sender == user %}bubble--out{% else %}bubble--in{% endif %}">
+          {{ message.content }}
+          <time>{{ message.created_at|date:"H:i" }}</time>
+        </div>
+      {% endfor %}
+    </div>
+
+    <form class="chat-thread__composer" id="chat-form">
+      <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off">
+      <button type="submit" class="btn btn--primary">Send</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  const conversationId = {{ conversation.pk }};
+  const currentUsername = "{{ user.username }}";
+  const wsScheme = window.location.protocol === "https:" ? "wss" : "ws";
+  const chatSocket = new WebSocket(`${wsScheme}://${window.location.host}/ws/chat/${conversationId}/`);
+
+  const messageList = document.getElementById("message-list");
+  const form = document.getElementById("chat-form");
+  const input = document.getElementById("chat-input");
+
+  chatSocket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    const bubble = document.createElement("div");
+    bubble.className = "bubble " + (data.sender === currentUsername ? "bubble--out" : "bubble--in");
+
+    const textNode = document.createTextNode(data.message);
+    const timeEl = document.createElement("time");
+    timeEl.textContent = new Date(data.timestamp).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+
+    bubble.appendChild(textNode);
+    bubble.appendChild(timeEl);
+    messageList.appendChild(bubble);
+    messageList.scrollTop = messageList.scrollHeight;
+  };
+
+  chatSocket.onclose = function () {
+    console.error("Chat socket closed unexpectedly");
+  };
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!input.value.trim()) return;
+    chatSocket.send(JSON.stringify({ message: input.value }));
+    input.value = "";
+  });
+
+  messageList.scrollTop = messageList.scrollHeight;
+</script>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}BXL Market Chat{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a href="{% url 'listings:home' %}" class="topbar__brand">
+        <img src="{% static 'img/logo.png' %}" alt="BXL Market Chat" class="topbar__logo">
+      </a>
+
+      <form action="{% url 'listings:browse' %}" method="get" class="topbar__search">
+        <select class="topbar__search-select" disabled title="Category filter coming soon">
+          <option>All Categories</option>
+        </select>
+        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search products, brands and more...">
+        <button type="submit" aria-label="Search">&#128269;</button>
+      </form>
+
+      <div class="topbar__actions">
+        <a href="{% url 'posting:post_item' %}" class="topbar__action-link">
+          <span class="topbar__action-icon">&#127970;</span> Become a Seller
+        </a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'accounts:profile' %}" class="topbar__action-link">
+            <span class="topbar__action-icon">&#128100;</span> Hi, {{ user.username }}
+          </a>
+          <form action="{% url 'accounts:logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="topbar__action-link" style="background:none;border:none;cursor:pointer;font:inherit;">Logout</button>
+          </form>
+        {% else %}
+          <a href="{% url 'accounts:login' %}" class="topbar__action-link">
+            <span class="topbar__action-icon">&#128100;</span> Login / Sign up
+          </a>
+        {% endif %}
+        <a href="#" class="topbar__cart" title="Cart — coming soon with orders/payments">
+          &#128722;<span class="topbar__cart-badge">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar-secondary">
+    <div class="container navbar-secondary__inner">
+      <button type="button" class="navbar__burger" id="navbar-burger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="navbar-secondary__categories">&#9776; Categories</div>
+      <div class="navbar__links" id="navbar-links">
+        <a href="{% url 'listings:home' %}" class="{% block nav_home %}{% endblock %}">Home</a>
+        <a href="{% url 'listings:browse' %}" class="{% block nav_shop %}{% endblock %}">Shop</a>
+        <a href="#" class="{% block nav_deals %}{% endblock %}">BXL Deals</a>
+        <a href="#" class="{% block nav_stores %}{% endblock %}">Stores</a>
+        <a href="#" class="{% block nav_services %}{% endblock %}">Services</a>
+        <a href="#" class="{% block nav_global %}{% endblock %}">BXL Global</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'chat:inbox' %}" class="{% block nav_chat %}{% endblock %}">Market Chat</a>
+        {% endif %}
+      </div>
+      <div class="navbar-secondary__right">
+        <a href="#">Track Order</a>
+        <a href="#">Help &amp; Support</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    {% if messages %}
+      <div class="container">
+        <ul class="messages">
+          {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+   <footer class="footer">
+    <div class="container" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:12px;">
+      <span>&copy; {% now "Y" %} BXL Market Chat &mdash; Connect &bull; Chat &bull; Buy &bull; Sell</span>
+      <div style="display:flex; gap:16px;">
+        <a href="{% url 'terms' %}" style="color: var(--text-muted);">Terms of Service</a>
+        <a href="{% url 'privacy' %}" style="color: var(--text-muted);">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+  {% block extra_scripts %}{% endblock %}
+  <script>
+    const burger = document.getElementById("navbar-burger");
+    const navLinks = document.getElementById("navbar-links");
+    if (burger && navLinks) {
+      burger.addEventListener("click", function () {
+        navLinks.classList.toggle("navbar__links--open");
+        burger.classList.toggle("navbar__burger--open");
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}BXL Market Chat — Shop. Sell. Grow. All in One Place.{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block content %}
+<section class="hero-dark">
+  <div class="container hero-dark__inner">
+    <div class="hero-dark__copy">
+      <span class="hero-dark__eyebrow">WELCOME TO BXL MARKETCHAT</span>
+      <h1>Shop. Sell. Grow.<br><span class="accent">All in One Place.</span></h1>
+      <p>BXL MarketChat connects buyers and sellers across industries. Expand your business. Grow your world.</p>
+      <div class="hero-dark__ctas">
+        <a href="{% url 'listings:browse' %}" class="btn btn--primary">&#128717; Shop Now</a>
+        <a href="{% url 'posting:post_item' %}" class="btn btn--outline">&#127970; Become a Seller</a>
+      </div>
+      <div class="hero-dark__trust">
+        <span>&#9989; Secure Payments</span>
+        <span>&#9989; Verified Sellers</span>
+        <span>&#9989; Fast Delivery</span>
+      </div>
+    </div>
+
+    <div class="hero-dark__art">
+      <img src="{% static 'img/hero-phone.png' %}" alt="BXL Market Chat app preview" class="hero-dark__art-img">
+    </div>
+
+    <div class="hero-dark__sidecards">
+      <div class="hero-sidecard">
+        <div class="hero-sidecard__icon">&#128176;</div>
+        <h4>Millions of Products</h4>
+        <p>Find everything you need in one place</p>
+      </div>
+      <div class="hero-sidecard">
+        <div class="hero-sidecard__icon">&#128101;</div>
+        <h4>Trusted Community</h4>
+        <p>Join thousands of verified buyers and sellers</p>
+      </div>
+      <div class="hero-sidecard">
+        <div class="hero-sidecard__icon">&#128200;</div>
+        <h4>Business Growth</h4>
+        <p>Tools to help your business expand faster</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <section class="category-strip">
+    {% for category in categories %}
+    <a href="{% url 'listings:category' category.slug %}" class="category-strip__item">
+      <div class="category-strip__icon">&#9679;</div>
+      <span>{{ category.name }}</span>
+    </a>
+    {% empty %}
+    <p class="helptext">Categories will show up here once added in the admin.</p>
+    {% endfor %}
+    <a href="{% url 'listings:browse' %}" class="category-strip__item">
+      <div class="category-strip__icon">&#8942;</div>
+      <span>More</span>
+    </a>
+  </section>
+
+  <section class="promo-row">
+    <div class="promo-card promo-card--light">
+      <h3>Sell on BXL MarketChat</h3>
+      <p>Reach millions of buyers and grow your business</p>
+      <a href="{% url 'posting:post_item' %}" class="btn btn--primary btn--sm">Start Selling</a>
+    </div>
+    <div class="promo-card promo-card--dark">
+      <h3>BXL Deals<br>Everyday Savings!</h3>
+      <p>Top products at the best prices. Don't miss out!</p>
+      <a href="{% url 'listings:browse' %}" class="btn btn--primary btn--sm">Explore Deals</a>
+    </div>
+    <div class="promo-card promo-card--light">
+      <h3>Safe. Secure.<br>Reliable.</h3>
+      <p>Your security is our priority</p>
+      <a href="#" class="btn btn--primary btn--sm">Learn More</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section__head"><h2>Featured Products</h2><a href="{% url 'listings:browse' %}">View All &rsaquo;</a></div>
+    {% if featured_products %}
+    <div class="product-grid">
+      {% for product in featured_products %}
+        {% include "listings/_product_card.html" %}
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <h3>No listings yet</h3>
+      <p>Be the first to post something buyers can find.</p>
+      <a href="{% url 'posting:post_item' %}" class="btn btn--primary" style="margin-top:16px;">Post Your Item</a>
+    </div>
+    {% endif %}
+  </section>
+
+  <section class="stats-bar">
+    <div class="stats-bar__item"><span class="stats-bar__icon">&#128101;</span><div><strong>200K+</strong><p>Happy Customers</p></div></div>
+    <div class="stats-bar__item"><span class="stats-bar__icon">&#127970;</span><div><strong>15K+</strong><p>Verified Sellers</p></div></div>
+    <div class="stats-bar__item"><span class="stats-bar__icon">&#128230;</span><div><strong>1M+</strong><p>Products Listed</p></div></div>
+    <div class="stats-bar__item"><span class="stats-bar__icon">&#127760;</span><div><strong>20+</strong><p>Countries Reached</p></div></div>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Browse Products — BXL Market Chat{% endblock %}
+{% block nav_shop %}active{% endblock %}
+
+{% block content %}
+<div class="container">
+  <section class="section" style="padding-top:32px;">
+    <form method="get" style="display:flex; gap:12px; margin-bottom:28px;">
+      <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search products, sellers or services..."
+             style="flex:1; background: var(--surface); border:1px solid var(--border); border-radius: var(--radius-pill); padding:12px 20px; color: var(--text); font-family: inherit;">
+      <button type="submit" class="btn btn--primary">Search</button>
+    </form>
+
+    <div class="section__head">
+      <h2>{% if category %}{{ category.name }}{% else %}All Products{% endif %}</h2>
+      <span class="helptext">{{ page_obj.paginator.count|default:products.count }} listing{{ page_obj.paginator.count|pluralize }}</span>
+    </div>
+
+    {% if products %}
+    <div class="product-grid">
+      {% for product in products %}
+        {% include "listings/_product_card.html" %}
+      {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+    <div style="display:flex; gap:10px; justify-content:center; margin-top:32px;">
+      {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}" class="btn btn--outline btn--sm">Previous</a>{% endif %}
+      <span style="color: var(--text-muted); align-self:center; font-size:0.85rem;">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}" class="btn btn--outline btn--sm">Next</a>{% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="empty-state">
+      <h3>No products found</h3>
+      <p>Try a different search, or check back soon.</p>
+    </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

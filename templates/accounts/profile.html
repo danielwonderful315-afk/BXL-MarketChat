@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}My Account — BXL Market Chat{% endblock %}
+{% block nav_account %}active{% endblock %}
+{% block content %}
+<div class="container">
+  <section class="section">
+    <div style="display:flex; align-items:center; gap:16px; margin-bottom: 24px;">
+      <div class="avatar" style="width:64px; height:64px; font-size:1.5rem;">{{ object.username|first|upper }}</div>
+      <div>
+        <h1 style="font-size:1.5rem;">{{ object.username }}</h1>
+        <p class="helptext">{{ object.location|default:"Location not set" }} &middot; Joined {{ object.joined_at|date:"M Y" }}</p>
+      </div>
+    </div>
+
+    <div class="form-card" style="max-width: 480px;">
+      <div class="spec-row"><span>Wallet Balance</span><span>&#8358;{{ object.wallet_balance|floatformat:0 }}</span></div>
+      <div class="spec-row"><span>Verified Seller</span><span>{{ object.is_verified_seller|yesno:"Yes,No" }}</span></div>
+      <div class="spec-row"><span>Phone</span><span>{{ object.phone_number|default:"Not set" }}</span></div>
+      <div class="spec-row"><span>Email</span><span>{{ object.email|default:"Not set" }}</span></div>
+    </div>
+
+    <div style="margin-top: 24px; display:flex; gap:12px;">
+      <a href="{% url 'orders:my_orders' %}" class="btn btn--outline">My Orders</a>
+      <a href="{% url 'chat:inbox' %}" class="btn btn--outline">My Chats</a>
+    </div>
+  </section>
+</div>
+{% endblock %}

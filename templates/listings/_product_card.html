@@ -1,0 +1,21 @@
+<a href="{{ product.get_absolute_url }}" class="product-card">
+  <div class="product-card__img">
+    {% if product.images.first %}
+      <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}" style="width:100%; height:100%; object-fit:cover;">
+    {% else %}
+      No photo yet
+    {% endif %}
+    {% if product.condition == 'new' %}<span class="product-card__badge">New</span>{% endif %}
+    <span class="product-card__fav" title="Save — coming soon">&#9825;</span>
+  </div>
+  <div class="product-card__body">
+    <div class="product-card__title">{{ product.title }}</div>
+    <div class="product-card__meta">{{ product.location }}</div>
+    <div class="product-card__price-row">
+      <span class="product-card__price">&#8358;{{ product.price|floatformat:0 }}</span>
+      {% if product.compare_at_price and product.compare_at_price > product.price %}
+        <span class="product-card__compare-price">&#8358;{{ product.compare_at_price|floatformat:0 }}</span>
+      {% endif %}
+    </div>
+  </div>
+</a>

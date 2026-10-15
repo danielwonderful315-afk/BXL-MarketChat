@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}{{ product.title }} — BXL Market Chat{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="detail-grid">
+    <div>
+      <div class="detail-gallery__main">
+        {% if product.images.first %}
+          <img src="{{ product.images.first.image.url }}" alt="{{ product.title }}" style="width:100%; height:100%; object-fit:cover; border-radius: var(--radius);">
+        {% else %}
+          No photos uploaded yet
+        {% endif %}
+      </div>
+    </div>
+
+    <div>
+      {% if product.condition == 'new' %}<span class="badge">Brand New</span>{% endif %}
+      <h1 style="font-size: 1.8rem;">{{ product.title }}</h1>
+      <div class="detail-price">&#8358;{{ product.price|floatformat:0 }}</div>
+      {% if product.negotiable %}<span class="badge">Negotiable</span>{% endif %}
+
+      <div style="margin-top: 20px;">
+        <div class="spec-row"><span>Condition</span><span>{{ product.get_condition_display }}</span></div>
+        <div class="spec-row"><span>Location</span><span>{{ product.location }}</span></div>
+        <div class="spec-row"><span>Category</span><span>{{ product.category.name }}</span></div>
+        <div class="spec-row"><span>Posted</span><span>{{ product.created_at|timesince }} ago</span></div>
+        <div class="spec-row"><span>Views</span><span>{{ product.views }}</span></div>
+      </div>
+
+      <h3 style="margin-top: 24px; font-size:1rem;">Description</h3>
+      <p style="color: var(--text-muted);">{{ product.description|linebreaksbr }}</p>
+
+      <div class="seller-card">
+        <div class="seller-card__row">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="avatar">{{ product.seller.username|first|upper }}</div>
+            <div>
+              <div style="font-weight:600;">{{ product.seller.username }}</div>
+              <div class="helptext">{{ product.seller.location|default:"Location not set" }}</div>
+            </div>
+          </div>
+          <a href="{% url 'accounts:storefront' product.seller.username %}" class="btn btn--outline btn--sm">View Profile</a>
+        </div>
+        <div class="seller-card__actions">
+          {% if user.is_authenticated %}
+          <form action="{% url 'chat:start' product.slug %}" method="post" style="flex:1;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn--outline btn--block">Chat Seller</button>
+          </form>
+          {% else %}
+          <a href="{% url 'accounts:login' %}" class="btn btn--outline" style="flex:1;">Login to Chat</a>
+          {% endif %}
+         {% if user.is_authenticated %}
+<form action="{% url 'orders:buy_now' product.slug %}" method="post" style="flex:1;">
+  {% csrf_token %}
+  <button type="submit" class="btn btn--primary btn--block">Buy Now</button>
+</form>
+{% else %}
+<a href="{% url 'accounts:login' %}" class="btn btn--primary" style="flex:1;">Login to Buy</a>
+{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Payment Error — BXL Market Chat{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="form-page" style="text-align:center;">
+    <h1 style="font-size: 1.5rem;">Couldn't start payment</h1>
+    <p class="helptext" style="margin: 12px 0 24px;">Something went wrong reaching the payment provider. Please try again in a moment.</p>
+    <a href="{% url 'orders:order_detail' order.pk %}" class="btn btn--primary">Back to Order</a>
+  </div>
+</div>
+{% endblock %}

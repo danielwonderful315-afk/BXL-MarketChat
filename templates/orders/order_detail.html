@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Order #{{ order.pk }} — BXL Market Chat{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="form-page">
+    <h1 style="font-size: 1.6rem;">Order #{{ order.pk }}</h1>
+    <div class="form-card">
+      <div class="spec-row"><span>Product</span><span>{{ order.product.title }}</span></div>
+      <div class="spec-row"><span>Quantity</span><span>{{ order.quantity }}</span></div>
+      <div class="spec-row"><span>Total</span><span>&#8358;{{ order.total_price|floatformat:0 }}</span></div>
+      <div class="spec-row"><span>Status</span><span class="badge">{{ order.get_status_display }}</span></div>
+      <div class="spec-row"><span>Buyer</span><span>{{ order.buyer.username }}</span></div>
+      <div class="spec-row"><span>Seller</span><span>{{ order.seller.username }}</span></div>
+    </div>
+    {% if order.delivery_request %}
+      <a href="{% url 'logistics:track_delivery' order.pk %}" class="btn btn--primary">Track Delivery</a>
+    {% else %}
+      <a href="{% url 'logistics:create_delivery' order.pk %}" class="btn btn--primary">Choose Delivery Option</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

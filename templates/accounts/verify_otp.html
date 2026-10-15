@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Verify Your Account — BXL Market Chat{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="form-page">
+    <h1 style="font-size: 1.6rem;">Verify your account</h1>
+    <p class="helptext" style="margin-bottom: 24px;">
+      We sent a 6-digit code to <strong>{{ pending_user.email }}</strong>. Enter it below to activate your account.
+    </p>
+    <form method="post" class="form-card">
+      {% csrf_token %}
+      <div class="field">
+        <label for="otp-code">Verification Code</label>
+        <input type="text" id="otp-code" name="code" maxlength="6" inputmode="numeric" pattern="[0-9]{6}"
+               placeholder="000000" autofocus
+               style="letter-spacing: 0.4em; text-align:center; font-size: 1.3rem;">
+      </div>
+      <button type="submit" class="btn btn--primary btn--block">Verify</button>
+    </form>
+    <form method="post" action="{% url 'accounts:resend_otp' %}" style="text-align:center; margin-top:16px;">
+      {% csrf_token %}
+      <button type="submit" class="btn btn--outline btn--sm">Resend Code</button>
+    </form>
+        <p class="helptext" style="margin-top:16px; text-align:center;">
+      Code expires a few minutes after it's sent — request a new one if it's gone stale.
+    </p>
+    <p class="helptext" style="margin-top:10px; text-align:center; color: var(--text-muted);">
+      Don't see it in your inbox? Check your <strong>Spam</strong> or <strong>Blocked</strong> folder — verification emails sometimes land there.
+    </p>
+  </div>
+</div>
+{% endblock %}

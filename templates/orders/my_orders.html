@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}My Orders — BXL Market Chat{% endblock %}
+{% block content %}
+<div class="container">
+  <section class="section">
+    <h1 style="font-size: 1.6rem; margin-bottom: 20px;">My Orders</h1>
+
+    {% if orders %}
+    <div class="form-card" style="padding:0; overflow:hidden;">
+      {% for order in orders %}
+      <div class="spec-row" style="padding: 16px 20px; align-items:center;">
+        <div>
+          <div style="font-weight:600;">{{ order.product.title }}</div>
+          <div class="helptext">&#8358;{{ order.total_price|floatformat:0 }} &middot; {{ order.created_at|date:"M d, Y" }}</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span class="badge">{{ order.get_status_display }}</span>
+          {% if order.delivery_request %}
+            <a href="{% url 'logistics:track_delivery' order.pk %}" class="btn btn--outline btn--sm">Track Delivery</a>
+          {% else %}
+            <a href="{% url 'logistics:create_delivery' order.pk %}" class="btn btn--primary btn--sm">Choose Delivery</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <h3>No orders yet</h3>
+      <p>When you buy something, it'll show up here.</p>
+      <a href="{% url 'listings:browse' %}" class="btn btn--primary" style="margin-top:16px;">Browse Products</a>
+    </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

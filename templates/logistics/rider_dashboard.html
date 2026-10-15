@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Rider Dashboard — BXL Market Chat{% endblock %}
+{% block content %}
+<div class="container">
+  <section class="section">
+    <h1 style="font-size: 1.6rem;">Welcome, {{ rider.name }}</h1>
+    <p class="helptext" style="margin-bottom: 24px;">
+      {{ rider.get_vehicle_type_display }} &middot; {{ rider.state }}
+    </p>
+
+    <h2 style="font-size: 1.2rem; margin-bottom: 16px;">Available Jobs</h2>
+    {% if available_jobs %}
+    <div class="form-card" style="padding:0; overflow:hidden; margin-bottom: 32px;">
+      {% for job in available_jobs %}
+      <div class="spec-row" style="padding: 16px 20px; align-items:center;">
+        <div>
+          <div style="font-weight:600;">{{ job.order.product.title }}</div>
+          <div class="helptext">To: {{ job.dropoff_address }}, {{ job.state }}</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span class="badge">&#8358;{{ job.estimated_price|floatformat:0 }}</span>
+          <form method="post" action="{% url 'logistics:accept_job' job.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn--primary btn--sm">Accept</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state" style="margin-bottom: 32px;">
+      <h3>No jobs available right now</h3>
+      <p>New deliveries matching your vehicle type and state will show up here.</p>
+    </div>
+    {% endif %}
+
+    <h2 style="font-size: 1.2rem; margin-bottom: 16px;">My Deliveries</h2>
+    {% if my_jobs %}
+    <div class="form-card" style="padding:0; overflow:hidden;">
+      {% for job in my_jobs %}
+      <div class="spec-row" style="padding: 16px 20px; align-items:center;">
+        <div>
+          <div style="font-weight:600;">{{ job.order.product.title }}</div>
+          <div class="helptext">To: {{ job.dropoff_address }}, {{ job.state }}</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span class="badge">{{ job.get_status_display }}</span>
+          {% if job.status != 'delivered' %}
+          <form method="post" action="{% url 'logistics:update_job_status' job.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn--outline btn--sm">
+              {% if job.status == 'assigned' %}Mark Picked Up
+              {% elif job.status == 'picked_up' %}Mark In Transit
+              {% elif job.status == 'in_transit' %}Mark Delivered
+              {% endif %}
+            </button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state"><h3>No active deliveries</h3><p>Accept a job above to get started.</p></div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
